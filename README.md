@@ -6,9 +6,9 @@
 
 每只猫都可以加载两张资源：用于替换Kill_Slugcat和Multiplayer_Death
 
-兼容方法（针对SlugBase单mod单猫）：资源命名分别为 $"Kill_Slugcat_{MOD_ID}" 和 $"Multiplayer_Death_{MOD_ID}"
+兼容方法（针对SlugBase单mod单猫）：资源命名分别为 "Kill_Slugcat_{MOD_ID}" 和 "Multiplayer_Death_{MOD_ID}"
 
-更普遍的一般形式：$"Kill_Slugcat_{你的猫的id}" 和 $"Multiplayer_Death_{你的猫的id}"
+更普遍的一般形式："Kill_Slugcat_{你的猫的id}" 和 "Multiplayer_Death_{你的猫的id}"
 
 用Futile.atlasManager.LoadAtlas加载资源后即可正常显示。
 
