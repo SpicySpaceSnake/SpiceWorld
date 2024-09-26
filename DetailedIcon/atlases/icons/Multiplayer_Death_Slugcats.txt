@@ -1,0 +1,76 @@
+{"frames": {
+
+"Multiplayer_Death_Artificer.png":
+{
+	"frame": {"x":45,"y":1,"w":18,"h":17},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":18,"h":17},
+	"sourceSize": {"w":18,"h":17}
+},
+"Multiplayer_Death_Gourmand.png":
+{
+	"frame": {"x":1,"y":26,"w":18,"h":19},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":18,"h":19},
+	"sourceSize": {"w":18,"h":19}
+},
+"Multiplayer_Death_Red.png":
+{
+	"frame": {"x":21,"y":20,"w":18,"h":17},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":18,"h":17},
+	"sourceSize": {"w":18,"h":17}
+},
+"Multiplayer_Death_Rivulet.png":
+{
+	"frame": {"x":21,"y":1,"w":22,"h":17},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":22,"h":17},
+	"sourceSize": {"w":22,"h":17}
+},
+"Multiplayer_Death_Saint.png":
+{
+	"frame": {"x":41,"y":20,"w":18,"h":17},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":18,"h":17},
+	"sourceSize": {"w":18,"h":17}
+},
+"Multiplayer_Death_Spear.png":
+{
+	"frame": {"x":1,"y":1,"w":18,"h":23},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":18,"h":23},
+	"sourceSize": {"w":18,"h":23}
+},
+"Multiplayer_Death_White.png":
+{
+	"frame": {"x":21,"y":39,"w":18,"h":17},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":18,"h":17},
+	"sourceSize": {"w":18,"h":17}
+},
+"Multiplayer_Death_Yellow.png":
+{
+	"frame": {"x":41,"y":39,"w":18,"h":17},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":18,"h":17},
+	"sourceSize": {"w":18,"h":17}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "Multiplayer_Death_Slugcats.png",
+	"format": "RGBA8888",
+	"size": {"w":64,"h":57},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:8726a2541b43e378a38d7eed200de1e6:e0c37bfa10dbb1e20e89d00ee1380ae5:e78ee16e6071512020d517a6691b933d$"
+}
+}
