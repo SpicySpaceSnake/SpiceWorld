@@ -28,6 +28,7 @@ public partial class DetailedIcon : BaseUnityPlugin
         On.RainWorld.OnModsInit += Extras.WrapInit(LoadResources);
         On.JollyCoop.JollyHUD.JollyMeter.PlayerIcon.ctor += JollyCoopJollyHUDJollyMeterPlayerIcon_ctor;
         On.JollyCoop.JollyHUD.JollyMeter.PlayerIcon.Update += JollyCoopJollyHUDJollyMeterPlayerIcon_Update;
+        On.JollyCoop.JollyHUD.JollyPlayerSpecificHud.JollyDeathBump.ctor += JollyCoopJollyHUDJollyPlayerSpecificHudJollyDeathBump_ctor;
         On.HUD.Map.SlugcatMarker.ctor += HUDMapSlugcatMarker_ctor;
         On.CreatureSymbol.SpriteNameOfCreature += CreatureSymbol_SpriteNameOfCreature;
         On.Player.ctor += Player_ctor;
@@ -39,6 +40,28 @@ public partial class DetailedIcon : BaseUnityPlugin
 
         Futile.atlasManager.LoadAtlas("atlases/icons/Kill_Slugcats");
         Futile.atlasManager.LoadAtlas("atlases/icons/Multiplayer_Death_Slugcats");
+    }
+
+    private void JollyCoopJollyHUDJollyPlayerSpecificHudJollyDeathBump_ctor(On.JollyCoop.JollyHUD.JollyPlayerSpecificHud.JollyDeathBump.orig_ctor orig, JollyCoop.JollyHUD.JollyPlayerSpecificHud.JollyDeathBump self, JollyCoop.JollyHUD.JollyPlayerSpecificHud jollyHud)
+    {
+        self.jollyHud = jollyHud;
+        self.SetPosToPlayer();
+        self.gradient = new FSprite("Futile_White", true);
+        self.gradient.shader = jollyHud.hud.rainWorld.Shaders["FlatLight"];
+        if ((jollyHud.abstractPlayer.state as PlayerState).slugcatCharacter != SlugcatStats.Name.Night)
+        {
+            self.gradient.color = new Color(0f, 0f, 0f);
+        }
+        jollyHud.hud.fContainers[0].AddChild(self.gradient);
+        self.gradient.alpha = 0f;
+        self.gradient.x = -1000f;
+        self.symbolSprite = new FSprite("Multiplayer_Death", true);
+        string playerType = players.TryGetValue(jollyHud.abstractPlayer.ID.number, out Player player) ? player.slugcatStats.name.value : "Unknown";
+        self.symbolSprite.element = Futile.atlasManager._allElementsByName.Keys.ToList().Exists(x => x.StartsWith($"Multiplayer_Death_{playerType}")) ? Futile.atlasManager.GetElementWithName($"Multiplayer_Death_{playerType}") : Futile.atlasManager.GetElementWithName("Multiplayer_Death");
+        self.symbolSprite.color = PlayerGraphics.DefaultSlugcatColor((jollyHud.abstractPlayer.state as PlayerState).slugcatCharacter);
+        jollyHud.hud.fContainers[0].AddChild(self.symbolSprite);
+        self.symbolSprite.alpha = 0f;
+        self.symbolSprite.x = -1000f;
     }
 
     private void JollyCoopJollyHUDJollyMeterPlayerIcon_Update(On.JollyCoop.JollyHUD.JollyMeter.PlayerIcon.orig_Update orig, JollyCoop.JollyHUD.JollyMeter.PlayerIcon self)
