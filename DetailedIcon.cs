@@ -18,7 +18,7 @@ using System.IO;
 
 namespace DetailedIcon;
 
-[BepInPlugin("XuYangJerry.DetailedIcon", "DetailedIcon", "1.0.0")]
+[BepInPlugin("XuYangJerry.DetailedIcon", "Detailed Icon", "1.1.0")]
 public partial class DetailedIcon : BaseUnityPlugin
 {
     public static Dictionary<int, Player> players = new Dictionary<int, Player>();
@@ -101,7 +101,6 @@ public partial class DetailedIcon : BaseUnityPlugin
     {
         orig(self, abstractCreature, world);
         players[self.abstractCreature.ID.number] = self;
-        Debug.Log("Player " + self.abstractCreature.ID.number + " created.");
     }
 
     private string CreatureSymbol_SpriteNameOfCreature(On.CreatureSymbol.orig_SpriteNameOfCreature orig, IconSymbol.IconSymbolData iconData)
