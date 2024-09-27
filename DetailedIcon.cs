@@ -10,6 +10,7 @@ using BepInEx;
 using Debug = UnityEngine.Debug;
 using JollyCoop;
 using System.IO;
+using Menu;
 
 #pragma warning disable CS0618
 
@@ -29,6 +30,8 @@ public partial class DetailedIcon : BaseUnityPlugin
         On.JollyCoop.JollyHUD.JollyMeter.PlayerIcon.ctor += JollyCoopJollyHUDJollyMeterPlayerIcon_ctor;
         On.JollyCoop.JollyHUD.JollyMeter.PlayerIcon.Update += JollyCoopJollyHUDJollyMeterPlayerIcon_Update;
         On.JollyCoop.JollyHUD.JollyPlayerSpecificHud.JollyDeathBump.ctor += JollyCoopJollyHUDJollyPlayerSpecificHudJollyDeathBump_ctor;
+        On.Menu.MultiplayerMenu.PopulateSafariSlugcatButtons += MenuMultiplayerMenu_PopulateSafariSlugcatButtons;
+        On.Menu.FastTravelScreen.SpawnSlugcatButtons += MenuFastTravelScreen_SpawnSlugcatButtons;
         On.CreatureSymbol.SpriteNameOfCreature += CreatureSymbol_SpriteNameOfCreature;
         On.Player.ctor += Player_ctor;
     }
@@ -39,6 +42,111 @@ public partial class DetailedIcon : BaseUnityPlugin
 
         Futile.atlasManager.LoadAtlas("atlases/icons/Kill_Slugcats");
         Futile.atlasManager.LoadAtlas("atlases/icons/Multiplayer_Death_Slugcats");
+    }
+
+    private void MenuFastTravelScreen_SpawnSlugcatButtons(On.Menu.FastTravelScreen.orig_SpawnSlugcatButtons orig, FastTravelScreen self)
+    {
+        if (!ModManager.ModdedRegionsEnabled)
+        {
+            return;
+        }
+        self.DestroySlugcatButtons();
+        foreach (string text in ExtEnum<SlugcatStats.Name>.values.entries)
+        {
+            SlugcatStats.Name name = new SlugcatStats.Name(text, false);
+            if (!SlugcatStats.HiddenOrUnplayableSlugcat(name) && self.GetRegionsVisited(name).Count > 0)
+            {
+                SimpleButton simpleButton = new SimpleButton(self, self.pages[0], "", "SLUG" + text, new Vector2(self.manager.rainWorld.options.ScreenSize.x / 2f + (1366f - self.manager.rainWorld.options.ScreenSize.x) / 2f, 90f), new Vector2(48f, 48f));
+                if (self.activeMenuSlugcat == name)
+                {
+                    simpleButton.toggled = true;
+                }
+                simpleButton.nextSelectable[3] = simpleButton;
+                simpleButton.nextSelectable[1] = ((self.chooseButton == null) ? self.backButton : self.chooseButton);
+                FSprite fsprite = new FSprite("Kill_Slugcat", true);
+                fsprite.element = Futile.atlasManager._allElementsByName.Keys.ToList().Exists(x => x.StartsWith($"Kill_Slugcat_{text}")) ? Futile.atlasManager.GetElementWithName($"Kill_Slugcat_{text}") : Futile.atlasManager.GetElementWithName("Kill_Slugcat");
+                fsprite.color = PlayerGraphics.DefaultSlugcatColor(name);
+                self.slugcatLabels.Add(fsprite);
+                self.slugcatButtons.Add(simpleButton);
+                self.pages[0].Container.AddChild(fsprite);
+                self.pages[0].subObjects.Add(simpleButton);
+            }
+        }
+        float num = (float)self.slugcatButtons.Count * 56f;
+        for (int i = 0; i < self.slugcatButtons.Count; i++)
+        {
+            SimpleButton simpleButton2 = self.slugcatButtons[i];
+            simpleButton2.pos.x += ((float)i * 56f - num * 0.5f);
+            self.slugcatLabels[i].x = simpleButton2.pos.x + simpleButton2.size.x * 0.5f - (1366f - self.manager.rainWorld.options.ScreenSize.x) / 2f;
+            self.slugcatLabels[i].y = simpleButton2.pos.y + simpleButton2.size.y * 0.5f;
+        }
+    }
+
+    private void MenuMultiplayerMenu_PopulateSafariSlugcatButtons(On.Menu.MultiplayerMenu.orig_PopulateSafariSlugcatButtons orig, Menu.MultiplayerMenu self, string regionName)
+    {
+        for (int i = 0; i < self.safariSlugcatButtons.Count; i++)
+        {
+            self.safariSlugcatButtons[i].RemoveSprites();
+            self.pages[0].RemoveSubObject(self.safariSlugcatButtons[i]);
+        }
+        self.safariSlugcatButtons.Clear();
+        for (int j = 0; j < self.safariSlugcatLabels.Count; j++)
+        {
+            self.safariSlugcatLabels[j].RemoveFromContainer();
+        }
+        self.safariSlugcatLabels.Clear();
+        for (int k = 0; k < ExtEnum<SlugcatStats.Name>.values.Count; k++)
+        {
+            SlugcatStats.Name name = new SlugcatStats.Name(ExtEnum<SlugcatStats.Name>.values.GetEntry(k), false);
+            List<string> list = SlugcatStats.SlugcatStoryRegions(name);
+            list.AddRange(SlugcatStats.SlugcatOptionalRegions(name));
+            for (int l = 0; l < list.Count; l++)
+            {
+                bool flag = false;
+                if (self.manager.rainWorld.progression.miscProgressionData.regionsVisited.ContainsKey(regionName))
+                {
+                    flag = self.manager.rainWorld.progression.miscProgressionData.regionsVisited[regionName].Contains(name.value);
+                }
+                if (regionName == list[l] && (flag || (MultiplayerUnlocks.CheckUnlockSafari() && !SlugcatStats.HiddenOrUnplayableSlugcat(name))))
+                {
+                    SimpleButton item = new SimpleButton(self, self.pages[0], "", "SAFSLUG" + name.Index.ToString(), new Vector2(self.manager.rainWorld.options.ScreenSize.x / 2f + (1366f - self.manager.rainWorld.options.ScreenSize.x) / 2f, 110f), new Vector2(48f, 48f));
+                    FSprite fsprite = new FSprite("Kill_Slugcat", true);
+                    fsprite.element = Futile.atlasManager._allElementsByName.Keys.ToList().Exists(x => x.StartsWith($"Kill_Slugcat_{name.value}")) ? Futile.atlasManager.GetElementWithName($"Kill_Slugcat_{name.value}") : Futile.atlasManager.GetElementWithName("Kill_Slugcat");
+                    fsprite.color = PlayerGraphics.DefaultSlugcatColor(name);
+                    self.safariSlugcatLabels.Add(fsprite);
+                    self.safariSlugcatButtons.Add(item);
+                    self.pages[0].Container.AddChild(fsprite);
+                    self.pages[0].subObjects.Add(item);
+                    break;
+                }
+            }
+        }
+        if (self.GetGameTypeSetup.safariSlugcatID >= 0 && self.GetGameTypeSetup.safariSlugcatID < self.safariSlugcatButtons.Count && !self.firstSafariSlugcatsButtonPopulate)
+        {
+            for (int m = 0; m < self.safariSlugcatButtons.Count; m++)
+            {
+                self.safariSlugcatButtons[m].toggled = false;
+            }
+            self.safariSlugcatButtons[self.GetGameTypeSetup.safariSlugcatID].toggled = true;
+        }
+        else
+        {
+            for (int n = 0; n < self.safariSlugcatButtons.Count; n++)
+            {
+                self.safariSlugcatButtons[n].toggled = false;
+            }
+            self.safariSlugcatButtons[0].toggled = true;
+            self.GetGameTypeSetup.safariSlugcatID = 0;
+        }
+        self.firstSafariSlugcatsButtonPopulate = true;
+        float num = (float)self.safariSlugcatButtons.Count * 56f;
+        for (int num2 = 0; num2 < self.safariSlugcatButtons.Count; num2++)
+        {
+            SimpleButton simpleButton = self.safariSlugcatButtons[num2];
+            simpleButton.pos.x = simpleButton.pos.x + ((float)num2 * 56f - num * 0.5f);
+            self.safariSlugcatLabels[num2].x = simpleButton.pos.x + simpleButton.size.x * 0.5f - (1366f - self.manager.rainWorld.options.ScreenSize.x) / 2f;
+            self.safariSlugcatLabels[num2].y = simpleButton.pos.y + simpleButton.size.y * 0.5f;
+        }
     }
 
     private void JollyCoopJollyHUDJollyPlayerSpecificHudJollyDeathBump_ctor(On.JollyCoop.JollyHUD.JollyPlayerSpecificHud.JollyDeathBump.orig_ctor orig, JollyCoop.JollyHUD.JollyPlayerSpecificHud.JollyDeathBump self, JollyCoop.JollyHUD.JollyPlayerSpecificHud jollyHud)
