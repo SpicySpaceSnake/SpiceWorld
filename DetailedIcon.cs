@@ -29,7 +29,6 @@ public partial class DetailedIcon : BaseUnityPlugin
         On.JollyCoop.JollyHUD.JollyMeter.PlayerIcon.ctor += JollyCoopJollyHUDJollyMeterPlayerIcon_ctor;
         On.JollyCoop.JollyHUD.JollyMeter.PlayerIcon.Update += JollyCoopJollyHUDJollyMeterPlayerIcon_Update;
         On.JollyCoop.JollyHUD.JollyPlayerSpecificHud.JollyDeathBump.ctor += JollyCoopJollyHUDJollyPlayerSpecificHudJollyDeathBump_ctor;
-        On.HUD.Map.SlugcatMarker.ctor += HUDMapSlugcatMarker_ctor;
         On.CreatureSymbol.SpriteNameOfCreature += CreatureSymbol_SpriteNameOfCreature;
         On.Player.ctor += Player_ctor;
     }
@@ -113,11 +112,6 @@ public partial class DetailedIcon : BaseUnityPlugin
             return "Kill_Slugcat" + ( Futile.atlasManager._allElementsByName.Keys.ToList().Exists(x => x.StartsWith($"Kill_Slugcat_{playerType}")) ? $"_{playerType}" : "" );
         }
         return orig(iconData);
-    }
-
-    private void HUDMapSlugcatMarker_ctor(On.HUD.Map.SlugcatMarker.orig_ctor orig, HUD.Map.SlugcatMarker self, HUD.Map map, int room, Vector2 inRoomPosition, Color slugcatColor)
-    {
-        orig(self, map, room, inRoomPosition, slugcatColor);
     }
 
     private void JollyCoopJollyHUDJollyMeterPlayerIcon_ctor(On.JollyCoop.JollyHUD.JollyMeter.PlayerIcon.orig_ctor orig, JollyCoop.JollyHUD.JollyMeter.PlayerIcon self, JollyCoop.JollyHUD.JollyMeter meter, AbstractCreature associatedPlayer, Color color)
