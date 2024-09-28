@@ -42,6 +42,8 @@ public partial class DetailedIcon : BaseUnityPlugin
 
         Futile.atlasManager.LoadAtlas("atlases/icons/Kill_Slugcats");
         Futile.atlasManager.LoadAtlas("atlases/icons/Multiplayer_Death_Slugcats");
+
+        Futile.atlasManager.LoadAtlas("atlases/icons/Inv_icon");
     }
 
     private void MenuFastTravelScreen_SpawnSlugcatButtons(On.Menu.FastTravelScreen.orig_SpawnSlugcatButtons orig, FastTravelScreen self)
@@ -192,9 +194,9 @@ public partial class DetailedIcon : BaseUnityPlugin
             if (!self.dead)
             {
                 self.iconSprite.RemoveFromContainer();
-                string playerType = self.iconSprite.element.name.Split('_').Length == 3 ? ("_" + self.iconSprite.element.name.Split('_')[2] ) : "";
+                string playerType = self.iconSprite.element.name.Split('_').Length == 3 ? self.iconSprite.element.name.Split('_')[2]  : "";
                 self.iconSprite = new FSprite("Multiplayer_Death", true);
-                self.iconSprite.element = Futile.atlasManager.GetElementWithName($"Multiplayer_Death{playerType}");
+                self.iconSprite.element = Futile.atlasManager.GetElementWithName($"Multiplayer_Death{ (Futile.atlasManager._allElementsByName.Keys.ToList().Exists(x => x.StartsWith($"Multiplayer_Death_{playerType}")) ? $"_{playerType}" : "") }");
                 self.iconSprite.scale *= 0.8f;
                 self.meter.fContainer.AddChild(self.iconSprite);
                 self.dead = true;
@@ -209,6 +211,7 @@ public partial class DetailedIcon : BaseUnityPlugin
     {
         orig(self, abstractCreature, world);
         players[self.abstractCreature.ID.number] = self;
+        Debug.Log($" [DetailedIcon] Player {self.abstractCreature.ID.number} created: {self.slugcatStats.name.value} ;\n\t\t\t\t Texture state: Kill_Slugcat_{self.slugcatStats.name.value} = {Futile.atlasManager._allElementsByName.Keys.ToList().Exists(x => x.StartsWith($"Kill_Slugcat_{self.slugcatStats.name.value}"))}; Multiplayer_Death_{self.slugcatStats.name.value} = {Futile.atlasManager._allElementsByName.Keys.ToList().Exists(x => x.StartsWith($"Multiplayer_Death_{self.slugcatStats.name.value}"))}");
     }
 
     private string CreatureSymbol_SpriteNameOfCreature(On.CreatureSymbol.orig_SpriteNameOfCreature orig, IconSymbol.IconSymbolData iconData)
@@ -229,7 +232,7 @@ public partial class DetailedIcon : BaseUnityPlugin
     }
 }
 
-//放弃对多层的支持，原因：不知道如何获取颜色
+//放弃对多层的支持，原因：不知道如何获取颜色、修改过多
 public class PlayerIconPlus //: JollyCoop.JollyHUD.JollyMeter.PlayerIcon
 {    
     private JollyCoop.JollyHUD.JollyMeter meter;
