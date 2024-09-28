@@ -1,7 +1,7 @@
 {
   "id": "XuYangJerry.DetailedIcon",
   "name": "Detailed Icon",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "authors": "XuYangJerry",
   "description": "Make the small icon in the bottom right corner of multiplayer match the Slugcats you're using, not only Survivors\n[让多人游戏中右下角的小图标符合你使用的蛞蝓猫，而不仅仅是求生者]\n\nAt the same time, change the icon that appears when you open the map to the Slugcats you use\n[同时让打开地图时显示的图标也更改成你使用的蛞蝓猫]\n\n\ngithub：https: //github.com/YangXu636/DetailedIcon",
   "requirements": [],
