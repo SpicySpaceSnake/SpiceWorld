@@ -19,7 +19,7 @@ using Menu;
 
 namespace DetailedIcon;
 
-[BepInPlugin("XuYangJerry.DetailedIcon", "Detailed Icon", "1.2.0")]
+[BepInPlugin("XuYangJerry.DetailedIcon", "Detailed Icon", "1.2.1")]
 public partial class DetailedIcon : BaseUnityPlugin
 {
     public static Dictionary<int, Player> players = new Dictionary<int, Player>();
