@@ -2,6 +2,8 @@
 
 一个让雨世界的图标更细致的轻量mod
 
+[中文](README.md) | [English](README_en.md)
+
 ## 如何兼容你的mod猫
 
 每只猫都可以加载两张资源：用于替换Kill_Slugcat和Multiplayer_Death
