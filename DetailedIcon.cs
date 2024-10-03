@@ -232,7 +232,7 @@ public partial class DetailedIcon : BaseUnityPlugin
     }
 }
 
-//放弃对多层的支持，原因：不知道如何获取颜色、修改过多
+//放弃对多层的支持，原因：不知道如何获取颜色、修改过多、不确定是否会影响性能
 public class PlayerIconPlus //: JollyCoop.JollyHUD.JollyMeter.PlayerIcon
 {    
     private JollyCoop.JollyHUD.JollyMeter meter;
