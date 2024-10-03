@@ -1,0 +1,36 @@
+{"frames": {
+
+"PainlessFruitHeart.png":
+{
+	"frame": {"x":1,"y":37,"w":9,"h":9},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":2,"y":6,"w":9,"h":9},
+	"sourceSize": {"w":13,"h":20}
+},
+"PainlessFruitLeft.png":
+{
+	"frame": {"x":1,"y":1,"w":10,"h":16},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":1,"w":10,"h":16},
+	"sourceSize": {"w":13,"h":20}
+},
+"PainlessFruitRight.png":
+{
+	"frame": {"x":1,"y":19,"w":10,"h":16},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":3,"w":10,"h":16},
+	"sourceSize": {"w":13,"h":20}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "Sofanthiel_icon.png",
+	"format": "RGBA8888",
+	"size": {"w":12,"h":47},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:da4c7e09f7746b6459adfabea8df1ab5:92d102eb31b10f1094fdf4dfc93f5328:81dfcec590a174b20dc1aebebf2d051c$"
+}
+}
