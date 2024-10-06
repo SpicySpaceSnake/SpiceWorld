@@ -11,6 +11,7 @@ using Debug = UnityEngine.Debug;
 using JollyCoop;
 using System.IO;
 using Menu;
+using MoreSlugcats;
 
 #pragma warning disable CS0618
 
@@ -44,6 +45,8 @@ public partial class DetailedIcon : BaseUnityPlugin
         Futile.atlasManager.LoadAtlas("atlases/icons/Multiplayer_Death_Slugcats");
 
         Futile.atlasManager.LoadAtlas("atlases/icons/Inv_icon");
+
+        Futile.atlasManager.LoadAtlas("atlases/icons/Kill_HunterDaddy");
     }
 
     private void MenuFastTravelScreen_SpawnSlugcatButtons(On.Menu.FastTravelScreen.orig_SpawnSlugcatButtons orig, FastTravelScreen self)
@@ -220,6 +223,10 @@ public partial class DetailedIcon : BaseUnityPlugin
         {
             string playerType = players.TryGetValue(iconData.intData, out Player player) ? player.slugcatStats.name.value : "Unknown";
             return "Kill_Slugcat" + ( Futile.atlasManager._allElementsByName.Keys.ToList().Exists(x => x == $"Kill_Slugcat_{playerType}") ? $"_{playerType}" : "" );
+        }
+        if (iconData.critType == MoreSlugcatsEnums.CreatureTemplateType.HunterDaddy)
+        {
+            return "Kill_HunterDaddy";
         }
         return orig(iconData);
     }
