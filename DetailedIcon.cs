@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Security;
 using System.Security.Permissions;
@@ -12,6 +11,8 @@ using JollyCoop;
 using System.IO;
 using Menu;
 using MoreSlugcats;
+using JollyCoop.JollyHUD;
+using System.Runtime.CompilerServices;
 
 #pragma warning disable CS0618
 
@@ -20,20 +21,24 @@ using MoreSlugcats;
 
 namespace DetailedIcon;
 
-[BepInPlugin("XuYangJerry.DetailedIcon", "Detailed Icon", "1.2.2")]
+[BepInPlugin("XuYangJerry.DetailedIcon", "Detailed Icon", "1.3.1")]
 public partial class DetailedIcon : BaseUnityPlugin
 {
     public static Dictionary<int, Player> players = new Dictionary<int, Player>();
+    public static ConditionalWeakTable<JollyMeter.PlayerIcon, DetailedPlayerIcon> DetailedPlayerIconsData = new();
+    public static Dictionary<int, Color> playerColors = new();
 
-    private void OnEnable()
+    public void OnEnable()
     {
         On.RainWorld.OnModsInit += Extras.WrapInit(LoadResources);
         On.JollyCoop.JollyHUD.JollyMeter.PlayerIcon.ctor += JollyCoopJollyHUDJollyMeterPlayerIcon_ctor;
+        On.JollyCoop.JollyHUD.JollyMeter.PlayerIcon.Draw += JollyCoopJollyHUDJollyMeterPlayerIcon_Draw;
         On.JollyCoop.JollyHUD.JollyMeter.PlayerIcon.Update += JollyCoopJollyHUDJollyMeterPlayerIcon_Update;
         On.JollyCoop.JollyHUD.JollyPlayerSpecificHud.JollyDeathBump.ctor += JollyCoopJollyHUDJollyPlayerSpecificHudJollyDeathBump_ctor;
         On.Menu.MultiplayerMenu.PopulateSafariSlugcatButtons += MenuMultiplayerMenu_PopulateSafariSlugcatButtons;
         On.Menu.FastTravelScreen.SpawnSlugcatButtons += MenuFastTravelScreen_SpawnSlugcatButtons;
         On.CreatureSymbol.SpriteNameOfCreature += CreatureSymbol_SpriteNameOfCreature;
+        On.ItemSymbol.SpriteNameForItem += ItemSymbol_SpriteNameForItem;
         On.Player.ctor += Player_ctor;
     }
 
@@ -47,6 +52,12 @@ public partial class DetailedIcon : BaseUnityPlugin
         Futile.atlasManager.LoadAtlas("atlases/icons/Inv_icon");
 
         Futile.atlasManager.LoadAtlas("atlases/icons/Kill_HunterDaddy");
+
+        Futile.atlasManager.LoadAtlas("atlases/icons/AdditionalIcon");
+
+        Futile.atlasManager.LoadAtlas("atlases/icons/Kill_Slugcats_Eyes");
+        Futile.atlasManager.LoadAtlas("atlases/icons/Multiplayer_Death_Slugcats_Eyes");
+        Futile.atlasManager.LoadAtlas("atlases/icons/Inv_icon_Eyes");
     }
 
     private void MenuFastTravelScreen_SpawnSlugcatButtons(On.Menu.FastTravelScreen.orig_SpawnSlugcatButtons orig, FastTravelScreen self)
@@ -67,7 +78,7 @@ public partial class DetailedIcon : BaseUnityPlugin
                     simpleButton.toggled = true;
                 }
                 simpleButton.nextSelectable[3] = simpleButton;
-                simpleButton.nextSelectable[1] = ((self.chooseButton == null) ? self.backButton : self.chooseButton);
+                simpleButton.nextSelectable[1] = self.chooseButton ?? self.backButton;
                 FSprite fsprite = new FSprite("Kill_Slugcat", true);
                 fsprite.element = Futile.atlasManager._allElementsByName.Keys.ToList().Exists(x => x == $"Kill_Slugcat_{text}") ? Futile.atlasManager.GetElementWithName($"Kill_Slugcat_{text}") : Futile.atlasManager.GetElementWithName("Kill_Slugcat");
                 fsprite.color = PlayerGraphics.DefaultSlugcatColor(name);
@@ -208,6 +219,10 @@ public partial class DetailedIcon : BaseUnityPlugin
                 self.gradient.color = Color.Lerp(Color.red, Color.black, 0.5f);
             }
         }
+        if (DetailedPlayerIconsData.TryGetValue(self, out var icon))
+        {
+            icon.Update();
+        }
     }
 
     private void Player_ctor(On.Player.orig_ctor orig, Player self, AbstractCreature abstractCreature, World world)
@@ -228,7 +243,48 @@ public partial class DetailedIcon : BaseUnityPlugin
         {
             return "Kill_HunterDaddy";
         }
+        if (iconData.critType == CreatureTemplate.Type.Fly)
+        {
+            return "Kill_Fly";
+        }
+        if (iconData.critType == CreatureTemplate.Type.TempleGuard)
+        {
+            return "Kill_TempleGuard";
+        }
         return orig(iconData);
+    }
+
+    private string ItemSymbol_SpriteNameForItem(On.ItemSymbol.orig_SpriteNameForItem orig, AbstractPhysicalObject.AbstractObjectType itemType, int intData)
+    {
+        if (itemType == AbstractPhysicalObject.AbstractObjectType.BlinkingFlower)
+        {
+            return "Kill_BlinkingFlower";
+        }
+        if (itemType == AbstractPhysicalObject.AbstractObjectType.DartMaggot)
+        {
+            return "Kill_DartMaggot";
+        }
+        if (itemType == AbstractPhysicalObject.AbstractObjectType.KarmaFlower)
+        {
+            return "Kill_KarmaFlower";
+        }
+        if (itemType == AbstractPhysicalObject.AbstractObjectType.SeedCob)
+        {
+            return "Kill_SeedCob";
+        }
+        if (itemType == AbstractPhysicalObject.AbstractObjectType.VoidSpawn)
+        {
+            return "Kill_VoidSpawn";
+        }
+        if (itemType == AbstractPhysicalObject.AbstractObjectType.Oracle)
+        {
+            return "Kill_Oracle";
+        }
+        if (itemType == MoreSlugcatsEnums.AbstractObjectType.HRGuard)
+        {
+            return "Kill_TempleGuard";
+        }
+        return orig(itemType, intData);
     }
 
     private void JollyCoopJollyHUDJollyMeterPlayerIcon_ctor(On.JollyCoop.JollyHUD.JollyMeter.PlayerIcon.orig_ctor orig, JollyCoop.JollyHUD.JollyMeter.PlayerIcon self, JollyCoop.JollyHUD.JollyMeter meter, AbstractCreature associatedPlayer, Color color)
@@ -236,32 +292,28 @@ public partial class DetailedIcon : BaseUnityPlugin
         orig(self, meter, associatedPlayer, color);
         string playerType = (associatedPlayer.realizedCreature as Player).slugcatStats.name.value;
         self.iconSprite.element = Futile.atlasManager._allElementsByName.Keys.ToList().Exists(x => x == $"Kill_Slugcat_{playerType}") ? Futile.atlasManager.GetElementWithName($"Kill_Slugcat_{playerType}") : Futile.atlasManager.GetElementWithName("Kill_Slugcat");
+        DetailedPlayerIconsData.Add(self, new DetailedPlayerIcon(self, associatedPlayer, playerType));
+    }
+
+    private void JollyCoopJollyHUDJollyMeterPlayerIcon_Draw(On.JollyCoop.JollyHUD.JollyMeter.PlayerIcon.orig_Draw orig, JollyMeter.PlayerIcon self, float timeStacker)
+    {
+        orig(self, timeStacker);
+        if (DetailedPlayerIconsData.TryGetValue(self, out var icon))
+        {
+            icon.Draw(timeStacker);
+        }
     }
 }
 
-//放弃对多层的支持，原因：不知道如何获取颜色、修改过多、不确定是否会影响性能
-public class PlayerIconPlus //: JollyCoop.JollyHUD.JollyMeter.PlayerIcon
-{    
-    private JollyCoop.JollyHUD.JollyMeter meter;
-    public int playerNumber;
-    private FSprite gradient;
-    public float baseGradScale;
-    public float baseGradAlpha;
-    public FSprite[] iconSprite;
-    public Color color;
-    public Vector2 pos;
-    public Vector2 lastPos;
-    private float blink;
-    public int blinkRed;
-    private bool dead;
-    private float lastBlink;
-    private AbstractCreature player;
-    private float rad;
-
-    public Vector2 DrawPos(float timeStacker)
-    {
-        return Vector2.Lerp(this.lastPos, this.pos, timeStacker);
-    }
+public class DetailedPlayerIcon
+{
+    public static WeakReference<JollyMeter.PlayerIcon> iconRef;
+    public FSprite newIconSprite;
+    public AbstractCreature player;
+    public Color iconColor;
+    public bool setColor;
+    public bool dead = false;
+    public string slugcatType;
 
     private PlayerState playerState
     {
@@ -271,101 +323,51 @@ public class PlayerIconPlus //: JollyCoop.JollyHUD.JollyMeter.PlayerIcon
         }
     }
 
-    private string playerType
+    public DetailedPlayerIcon(JollyMeter.PlayerIcon icon, AbstractCreature associatedPlayer, string slugcatType)
     {
-        get
-        {
-            return (this.player.realizedCreature as Player).slugcatStats.name.value;
-        }
-    }
-
-    public void ClearSprites()
-    {
-        this.gradient.RemoveFromContainer();
-        foreach (FSprite sprite in this.iconSprite)
-        {
-            sprite.RemoveFromContainer();
-        }
-    }
-
-    public PlayerIconPlus(JollyCoop.JollyHUD.JollyMeter meter, AbstractCreature associatedPlayer, Color color) //: base(meter, associatedPlayer, color)
-    {
+        iconRef = new WeakReference<JollyMeter.PlayerIcon>(icon);
+        this.slugcatType = slugcatType;
+        this.newIconSprite = new FSprite(Futile.atlasManager.DoesContainElementWithName($"Kill_Slugcat_{slugcatType}_Eyes") ? $"Kill_Slugcat_{slugcatType}_Eyes" : "Kill_Slugcat_White_Eyes", true);
         this.player = associatedPlayer;
-        this.meter = meter;
-        this.lastPos = this.pos;
-        this.AddGradient(JollyCustom.ColorClamp(color, -1f, 360f, 60f, 360f, -1f, 360f));
-        this.iconSprite = new FSprite[1] { new("Kill_Slugcat", true) };
-        try
-        {
-            this.iconSprite[0].element = Futile.atlasManager.GetElementWithName($"Kill_Slugcat_{playerType}");
-        }
-        catch (Exception e)
-        {
-            Debug.LogWarning(e.Message);
-            this.iconSprite[0].element = Futile.atlasManager.GetElementWithName($"Kill_Slugcat");
-        }
-        this.color = color;
-        this.meter.fContainer.AddChild(this.iconSprite[0]);
-        PlayerState playerState = this.playerState;
-        this.playerNumber = ((playerState != null) ? playerState.playerNumber : 0);
-        this.baseGradScale = 3.75f;
-        this.baseGradAlpha = 0.45f;
-    }
-
-    public void AddGradient(Color color)
-    {
-        this.gradient = new FSprite("Futile_White", true);
-        this.gradient.shader = this.meter.hud.rainWorld.Shaders["FlatLight"];
-        this.gradient.color = color;
-        this.gradient.scale = this.baseGradScale;
-        this.gradient.alpha = this.baseGradAlpha;
-        this.meter.fContainer.AddChild(this.gradient);
+        this.iconColor = icon.color;
+        this.setColor = false;
+        icon.meter.fContainer.AddChild(this.newIconSprite);
     }
 
     public void Draw(float timeStacker)
     {
-        float num = Mathf.Lerp(this.meter.lastFade, this.meter.fade, timeStacker);
-        this.iconSprite[0].alpha = num;
-        this.gradient.alpha = Mathf.SmoothStep(0f, 1f, num) * this.baseGradAlpha;
-        this.iconSprite[0].x = this.DrawPos(timeStacker).x;
-        this.iconSprite[0].y = this.DrawPos(timeStacker).y + (float)(this.dead ? 7 : 0);
-        this.gradient.x = this.iconSprite[0].x;
-        this.gradient.y = this.iconSprite[0].y;
-        if (this.meter.counter % 6 < 2 && this.lastBlink > 0f)
+        if (!iconRef.TryGetTarget(out var icon))
+            return;
+        if (!icon.iconSprite.element.name.Contains(this.slugcatType))
         {
-            this.color = Color.Lerp(this.color, Custom.HSL2RGB(Custom.RGB2HSL(this.color).x, Custom.RGB2HSL(this.color).y, Custom.RGB2HSL(this.color).z + 0.2f), Mathf.InverseLerp(0f, 0.5f, Mathf.Lerp(this.lastBlink, this.blink, timeStacker)));
+            if (this.playerState.permaDead || this.playerState.dead)
+                icon.iconSprite.element = Futile.atlasManager.GetElementWithName(Futile.atlasManager.DoesContainElementWithName($"Multiplayer_Death_{slugcatType}_Eyes") ? $"Multiplayer_Death_{slugcatType}_Eyes" : "Multiplayer_Death_White_Eyes");
+            else
+                icon.iconSprite.element = Futile.atlasManager.GetElementWithName(Futile.atlasManager.DoesContainElementWithName($"Kill_Slugcat_{slugcatType}_Eyes") ? $"Kill_Slugcat_{slugcatType}_Eyes" : "Kill_Slugcat_White_Eyes");
         }
-        this.iconSprite[0].color = this.color;
+
+        this.newIconSprite.alpha = icon.iconSprite.alpha;
+        this.newIconSprite.x = icon.iconSprite.x;
+        this.newIconSprite.y = icon.iconSprite.y;
+        this.newIconSprite.color = this.iconColor;
+        this.newIconSprite.MoveBehindOtherNode(icon.iconSprite);
     }
 
     public void Update()
     {
-        this.blink = Mathf.Max(0f, this.blink - 0.05f);
-        this.lastBlink = this.blink;
-        this.lastPos = this.pos;
-        this.color = PlayerGraphics.SlugcatColor(this.playerState.slugcatCharacter);
-        this.rad = Custom.LerpAndTick(this.rad, Custom.LerpMap(this.meter.fade, 0f, 0.79f, 0.79f, 1f, 1.3f), 0.12f, 0.1f);
-        if (this.blinkRed > 0)
+        if (!iconRef.TryGetTarget(out var icon))
+            return;
+        if (!setColor && player.realizedCreature != null && (player.realizedCreature.graphicsModule as PlayerGraphics) != null)
         {
-            this.blinkRed--;
-            this.rad *= Mathf.SmoothStep(1.1f, 0.85f, (float)(this.meter.counter % 20) / 20f);
-            this.color = Color.Lerp(this.color, JollyCustom.GenerateClippedInverseColor(this.color), this.rad / 4f);
+            setColor = true;
+            this.iconColor = PlayerGraphics.JollyColor((player.realizedCreature as Player).playerState.playerNumber, 1);
         }
-        this.iconSprite[0].scale = this.rad;
-        this.gradient.scale = this.baseGradScale * this.rad;
         if (this.playerState.permaDead || this.playerState.dead)
         {
-            this.color = Color.gray;
             if (!this.dead)
             {
-                this.iconSprite[0].RemoveFromContainer();
-                this.iconSprite = new FSprite[1] { new FSprite("Multiplayer_Death", true) };
-                this.iconSprite[0].scale *= 0.8f;
-                this.meter.fContainer.AddChild(this.iconSprite[0]);
+                this.newIconSprite.scale *= 0.8f;
                 this.dead = true;
-                this.meter.customFade = 5f;
-                this.blink = 3f;
-                this.gradient.color = Color.Lerp(Color.red, Color.black, 0.5f);
             }
         }
     }

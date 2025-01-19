@@ -1,0 +1,84 @@
+{"frames": {
+
+"Kill_BlinkingFlower.png":
+{
+	"frame": {"x":0,"y":39,"w":25,"h":25},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":25,"h":25},
+	"sourceSize": {"w":25,"h":25}
+},
+"Kill_Bullet.png":
+{
+	"frame": {"x":18,"y":29,"w":17,"h":8},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":17,"h":8},
+	"sourceSize": {"w":17,"h":8}
+},
+"Kill_DartMaggot.png":
+{
+	"frame": {"x":55,"y":0,"w":19,"h":19},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":19,"h":19},
+	"sourceSize": {"w":19,"h":19}
+},
+"Kill_Fly.png":
+{
+	"frame": {"x":36,"y":21,"w":31,"h":15},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":31,"h":15},
+	"sourceSize": {"w":31,"h":15}
+},
+"Kill_KarmaFlower.png":
+{
+	"frame": {"x":18,"y":0,"w":15,"h":28},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":15,"h":28},
+	"sourceSize": {"w":15,"h":28}
+},
+"Kill_Oracle.png":
+{
+	"frame": {"x":58,"y":37,"w":19,"h":19},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":19,"h":19},
+	"sourceSize": {"w":19,"h":19}
+},
+"Kill_SeedCob.png":
+{
+	"frame": {"x":0,"y":0,"w":17,"h":38},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":17,"h":38},
+	"sourceSize": {"w":17,"h":38}
+},
+"Kill_TempleGuard.png":
+{
+	"frame": {"x":26,"y":38,"w":31,"h":23},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":31,"h":23},
+	"sourceSize": {"w":31,"h":23}
+},
+"Kill_VoidSpawn.png":
+{
+	"frame": {"x":34,"y":0,"w":20,"h":20},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":20,"h":20},
+	"sourceSize": {"w":20,"h":20}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "AdditionalIcon.png",
+	"format": "RGBA8888",
+	"size": {"w":77,"h":64},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:51e7e6d17c1e54c041fff05db2636991:996318ccdb50081d1efa679bf31f81cb:4f8133e385c1d294d39715eab2b29329$"
+}
+}

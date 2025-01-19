@@ -1,0 +1,28 @@
+{"frames": {
+
+"Kill_Slugcat_Inv_Eyes.png":
+{
+	"frame": {"x":1,"y":1,"w":18,"h":17},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":18,"h":17},
+	"sourceSize": {"w":18,"h":17}
+},
+"Multiplayer_Death_Inv_Eyes.png":
+{
+	"frame": {"x":21,"y":1,"w":18,"h":17},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":18,"h":17},
+	"sourceSize": {"w":18,"h":17}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "Sofanthiel_icon.png",
+	"format": "RGBA8888",
+	"size": {"w":40,"h":19},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:7dcd9064c8d2a7c9ad3ce0804200d7ba:c63d32386d56240a5e2da3a779d3e808:81dfcec590a174b20dc1aebebf2d051c$"
+}
+}
