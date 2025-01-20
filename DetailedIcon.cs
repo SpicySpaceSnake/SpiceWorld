@@ -21,7 +21,7 @@ using System.Runtime.CompilerServices;
 
 namespace DetailedIcon;
 
-[BepInPlugin("XuYangJerry.DetailedIcon", "Detailed Icon", "1.3.1")]
+[BepInPlugin("XuYangJerry.DetailedIcon", "Detailed Icon", "1.3.3")]
 public partial class DetailedIcon : BaseUnityPlugin
 {
     public static Dictionary<int, Player> players = new Dictionary<int, Player>();
@@ -44,7 +44,7 @@ public partial class DetailedIcon : BaseUnityPlugin
 
     private void LoadResources(RainWorld rainWorld)
     {
-        Debug.Log("Loading DetailedIcon resources...");
+        Debug.Log(" [Detailed Icon] Loading DetailedIcon resources...");
 
         Futile.atlasManager.LoadAtlas("atlases/icons/Kill_Slugcats");
         Futile.atlasManager.LoadAtlas("atlases/icons/Multiplayer_Death_Slugcats");
@@ -80,7 +80,7 @@ public partial class DetailedIcon : BaseUnityPlugin
                 simpleButton.nextSelectable[3] = simpleButton;
                 simpleButton.nextSelectable[1] = self.chooseButton ?? self.backButton;
                 FSprite fsprite = new FSprite("Kill_Slugcat", true);
-                fsprite.element = Futile.atlasManager._allElementsByName.Keys.ToList().Exists(x => x == $"Kill_Slugcat_{text}") ? Futile.atlasManager.GetElementWithName($"Kill_Slugcat_{text}") : Futile.atlasManager.GetElementWithName("Kill_Slugcat");
+                fsprite.element = Futile.atlasManager._allElementsByName.Keys.ToList().Exists(x => x == $"Kill_Slugcat_{text}") ? Futile.atlasManager.GetElementWithName($"Kill_Slugcat_{text}") : Futile.atlasManager.GetElementWithName("Kill_Slugcat_White");
                 fsprite.color = PlayerGraphics.DefaultSlugcatColor(name);
                 self.slugcatLabels.Add(fsprite);
                 self.slugcatButtons.Add(simpleButton);
@@ -127,7 +127,7 @@ public partial class DetailedIcon : BaseUnityPlugin
                 {
                     SimpleButton item = new SimpleButton(self, self.pages[0], "", "SAFSLUG" + name.Index.ToString(), new Vector2(self.manager.rainWorld.options.ScreenSize.x / 2f + (1366f - self.manager.rainWorld.options.ScreenSize.x) / 2f, 110f), new Vector2(48f, 48f));
                     FSprite fsprite = new FSprite("Kill_Slugcat", true);
-                    fsprite.element = Futile.atlasManager._allElementsByName.Keys.ToList().Exists(x => x == $"Kill_Slugcat_{name.value}") ? Futile.atlasManager.GetElementWithName($"Kill_Slugcat_{name.value}") : Futile.atlasManager.GetElementWithName("Kill_Slugcat");
+                    fsprite.element = Futile.atlasManager._allElementsByName.Keys.ToList().Exists(x => x == $"Kill_Slugcat_{name.value}") ? Futile.atlasManager.GetElementWithName($"Kill_Slugcat_{name.value}") : Futile.atlasManager.GetElementWithName("Kill_Slugcat_White");
                     fsprite.color = PlayerGraphics.DefaultSlugcatColor(name);
                     self.safariSlugcatLabels.Add(fsprite);
                     self.safariSlugcatButtons.Add(item);
@@ -180,7 +180,7 @@ public partial class DetailedIcon : BaseUnityPlugin
         self.gradient.x = -1000f;
         self.symbolSprite = new FSprite("Multiplayer_Death", true);
         string playerType = players.TryGetValue(jollyHud.abstractPlayer.ID.number, out Player player) ? player.slugcatStats.name.value : "Unknown";
-        self.symbolSprite.element = Futile.atlasManager._allElementsByName.Keys.ToList().Exists(x => x == $"Multiplayer_Death_{playerType}") ? Futile.atlasManager.GetElementWithName($"Multiplayer_Death_{playerType}") : Futile.atlasManager.GetElementWithName("Multiplayer_Death");
+        self.symbolSprite.element = Futile.atlasManager._allElementsByName.Keys.ToList().Exists(x => x == $"Multiplayer_Death_{playerType}") ? Futile.atlasManager.GetElementWithName($"Multiplayer_Death_{playerType}") : Futile.atlasManager.GetElementWithName("Multiplayer_Death_White");
         self.symbolSprite.color = PlayerGraphics.DefaultSlugcatColor((jollyHud.abstractPlayer.state as PlayerState).slugcatCharacter);
         jollyHud.hud.fContainers[0].AddChild(self.symbolSprite);
         self.symbolSprite.alpha = 0f;
@@ -210,7 +210,7 @@ public partial class DetailedIcon : BaseUnityPlugin
                 self.iconSprite.RemoveFromContainer();
                 string playerType = players.TryGetValue(self.playerState.playerNumber, out Player player) ? player.slugcatStats.name.value : "Unknown";
                 self.iconSprite = new FSprite("Multiplayer_Death", true);
-                self.iconSprite.element = Futile.atlasManager.GetElementWithName($"Multiplayer_Death{ (Futile.atlasManager._allElementsByName.Keys.ToList().Exists(x => x == $"Multiplayer_Death_{playerType}") ? $"_{playerType}" : "") }");
+                self.iconSprite.element = Futile.atlasManager.GetElementWithName($"Multiplayer_Death{ (Futile.atlasManager._allElementsByName.Keys.ToList().Exists(x => x == $"Multiplayer_Death_{playerType}") ? $"_{playerType}" : "_White") }");
                 self.iconSprite.scale *= 0.8f;
                 self.meter.fContainer.AddChild(self.iconSprite);
                 self.dead = true;
@@ -221,7 +221,7 @@ public partial class DetailedIcon : BaseUnityPlugin
         }
         if (DetailedPlayerIconsData.TryGetValue(self, out var icon))
         {
-            icon.Update();
+            icon.Update(self.iconSprite);
         }
     }
 
@@ -229,7 +229,7 @@ public partial class DetailedIcon : BaseUnityPlugin
     {
         orig(self, abstractCreature, world);
         players[self.abstractCreature.ID.number] = self;
-        Debug.Log($" [DetailedIcon] Player {self.abstractCreature.ID.number} created: {self.slugcatStats.name.value} ;\n\t\t\t\t Texture state: Kill_Slugcat_{self.slugcatStats.name.value} = {Futile.atlasManager._allElementsByName.Keys.ToList().Exists(x => x == $"Kill_Slugcat_{self.slugcatStats.name.value}")}; Multiplayer_Death_{self.slugcatStats.name.value} = {Futile.atlasManager._allElementsByName.Keys.ToList().Exists(x => x == $"Multiplayer_Death_{self.slugcatStats.name.value}")}");
+        Debug.Log($" [Detailed Icon] Player {self.abstractCreature.ID.number} created: {self.slugcatStats.name.value} ;\n\t\t\t\t Texture state: Kill_Slugcat_{self.slugcatStats.name.value} = {Futile.atlasManager._allElementsByName.Keys.ToList().Exists(x => x == $"Kill_Slugcat_{self.slugcatStats.name.value}")}; Multiplayer_Death_{self.slugcatStats.name.value} = {Futile.atlasManager._allElementsByName.Keys.ToList().Exists(x => x == $"Multiplayer_Death_{self.slugcatStats.name.value}")}");
     }
 
     private string CreatureSymbol_SpriteNameOfCreature(On.CreatureSymbol.orig_SpriteNameOfCreature orig, IconSymbol.IconSymbolData iconData)
@@ -237,7 +237,7 @@ public partial class DetailedIcon : BaseUnityPlugin
         if (iconData.critType == CreatureTemplate.Type.Slugcat)
         {
             string playerType = players.TryGetValue(iconData.intData, out Player player) ? player.slugcatStats.name.value : "Unknown";
-            return "Kill_Slugcat" + ( Futile.atlasManager._allElementsByName.Keys.ToList().Exists(x => x == $"Kill_Slugcat_{playerType}") ? $"_{playerType}" : "" );
+            return "Kill_Slugcat" + ( Futile.atlasManager._allElementsByName.Keys.ToList().Exists(x => x == $"Kill_Slugcat_{playerType}") ? $"_{playerType}" : "_White" );
         }
         if (iconData.critType == MoreSlugcatsEnums.CreatureTemplateType.HunterDaddy)
         {
@@ -291,8 +291,8 @@ public partial class DetailedIcon : BaseUnityPlugin
     {
         orig(self, meter, associatedPlayer, color);
         string playerType = (associatedPlayer.realizedCreature as Player).slugcatStats.name.value;
-        self.iconSprite.element = Futile.atlasManager._allElementsByName.Keys.ToList().Exists(x => x == $"Kill_Slugcat_{playerType}") ? Futile.atlasManager.GetElementWithName($"Kill_Slugcat_{playerType}") : Futile.atlasManager.GetElementWithName("Kill_Slugcat");
-        DetailedPlayerIconsData.Add(self, new DetailedPlayerIcon(self, associatedPlayer, playerType));
+        self.iconSprite.element = Futile.atlasManager._allElementsByName.Keys.ToList().Exists(x => x == $"Kill_Slugcat_{playerType}") ? Futile.atlasManager.GetElementWithName($"Kill_Slugcat_{playerType}") : Futile.atlasManager.GetElementWithName("Kill_Slugcat_White");
+        DetailedPlayerIconsData.Add(self, new DetailedPlayerIcon(self.iconSprite, associatedPlayer, self));
     }
 
     private void JollyCoopJollyHUDJollyMeterPlayerIcon_Draw(On.JollyCoop.JollyHUD.JollyMeter.PlayerIcon.orig_Draw orig, JollyMeter.PlayerIcon self, float timeStacker)
@@ -300,14 +300,14 @@ public partial class DetailedIcon : BaseUnityPlugin
         orig(self, timeStacker);
         if (DetailedPlayerIconsData.TryGetValue(self, out var icon))
         {
-            icon.Draw(timeStacker);
+            icon.Draw(timeStacker, self.iconSprite);
         }
     }
 }
 
 public class DetailedPlayerIcon
 {
-    public static WeakReference<JollyMeter.PlayerIcon> iconRef;
+    public static WeakReference<FSprite> iconRef;
     public FSprite newIconSprite;
     public AbstractCreature player;
     public Color iconColor;
@@ -323,44 +323,44 @@ public class DetailedPlayerIcon
         }
     }
 
-    public DetailedPlayerIcon(JollyMeter.PlayerIcon icon, AbstractCreature associatedPlayer, string slugcatType)
+    public DetailedPlayerIcon(FSprite icon, AbstractCreature associatedPlayer, JollyMeter.PlayerIcon pi)
     {
-        iconRef = new WeakReference<JollyMeter.PlayerIcon>(icon);
-        this.slugcatType = slugcatType;
+        iconRef = new WeakReference<FSprite>(icon);
+        this.slugcatType = (associatedPlayer.realizedCreature as Player).SlugCatClass.value;
         this.newIconSprite = new FSprite(Futile.atlasManager.DoesContainElementWithName($"Kill_Slugcat_{slugcatType}_Eyes") ? $"Kill_Slugcat_{slugcatType}_Eyes" : "Kill_Slugcat_White_Eyes", true);
         this.player = associatedPlayer;
         this.iconColor = icon.color;
         this.setColor = false;
-        icon.meter.fContainer.AddChild(this.newIconSprite);
+        pi.meter.fContainer.AddChild(this.newIconSprite);
     }
 
-    public void Draw(float timeStacker)
+    public void Draw(float timeStacker, FSprite icon)
     {
-        if (!iconRef.TryGetTarget(out var icon))
+        if (!iconRef.TryGetTarget(out var _))
             return;
-        if (!icon.iconSprite.element.name.Contains(this.slugcatType))
+        if (!this.newIconSprite.element.name.Contains(this.slugcatType))
         {
             if (this.playerState.permaDead || this.playerState.dead)
-                icon.iconSprite.element = Futile.atlasManager.GetElementWithName(Futile.atlasManager.DoesContainElementWithName($"Multiplayer_Death_{slugcatType}_Eyes") ? $"Multiplayer_Death_{slugcatType}_Eyes" : "Multiplayer_Death_White_Eyes");
+                this.newIconSprite.element = Futile.atlasManager.GetElementWithName(Futile.atlasManager.DoesContainElementWithName($"{icon.element}_Eyes") ? $"{icon.element}_Eyes" : "Multiplayer_Death_White_Eyes");
             else
-                icon.iconSprite.element = Futile.atlasManager.GetElementWithName(Futile.atlasManager.DoesContainElementWithName($"Kill_Slugcat_{slugcatType}_Eyes") ? $"Kill_Slugcat_{slugcatType}_Eyes" : "Kill_Slugcat_White_Eyes");
+                this.newIconSprite.element = Futile.atlasManager.GetElementWithName(Futile.atlasManager.DoesContainElementWithName($"{icon.element}_Eyes") ? $"{icon.element}_Eyes" : "Kill_Slugcat_White_Eyes");
         }
 
-        this.newIconSprite.alpha = icon.iconSprite.alpha;
-        this.newIconSprite.x = icon.iconSprite.x;
-        this.newIconSprite.y = icon.iconSprite.y;
+        this.newIconSprite.alpha = icon.alpha;
+        this.newIconSprite.x = icon.x;
+        this.newIconSprite.y = icon.y;
         this.newIconSprite.color = this.iconColor;
-        this.newIconSprite.MoveBehindOtherNode(icon.iconSprite);
     }
 
-    public void Update()
+    public void Update(FSprite icon)
     {
-        if (!iconRef.TryGetTarget(out var icon))
+        if (!iconRef.TryGetTarget(out var _))
             return;
         if (!setColor && player.realizedCreature != null && (player.realizedCreature.graphicsModule as PlayerGraphics) != null)
         {
             setColor = true;
             this.iconColor = PlayerGraphics.JollyColor((player.realizedCreature as Player).playerState.playerNumber, 1);
+            Debug.Log($" [Detailed Icon] Set player {(player.realizedCreature as Player).playerState.playerNumber} eyes color to {this.iconColor}");
         }
         if (this.playerState.permaDead || this.playerState.dead)
         {

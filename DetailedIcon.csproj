@@ -24,12 +24,6 @@
     <Reference Include="BepInEx.Preloader">
       <HintPath>..\..\Tools\BepInEx\core\BepInEx.Preloader.dll</HintPath>
     </Reference>
-    <Reference Include="com.rlabrecque.steamworks.net">
-      <HintPath>..\REFERENCES\com.rlabrecque.steamworks.net.dll</HintPath>
-    </Reference>
-    <Reference Include="GoKit">
-      <HintPath>..\REFERENCES\GoKit.dll</HintPath>
-    </Reference>
     <Reference Include="HarmonyXInterop">
       <HintPath>..\..\Tools\BepInEx\core\HarmonyXInterop.dll</HintPath>
     </Reference>
@@ -68,12 +62,6 @@
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>..\Scientist_rwmod\lib\UnityEngine.CoreModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.ImageConversionModule">
-      <HintPath>..\REFERENCES\UnityEngine.ImageConversionModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.InputLegacyModule">
-      <HintPath>..\REFERENCES\UnityEngine.InputLegacyModule.dll</HintPath>
     </Reference>
   </ItemGroup>
 
