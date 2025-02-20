@@ -1,0 +1,76 @@
+{"frames": {
+
+"Kill_Slugcat_Artificer.png":
+{
+	"frame": {"x":45,"y":1,"w":18,"h":17},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":18,"h":17},
+	"sourceSize": {"w":18,"h":17}
+},
+"Kill_Slugcat_Gourmand.png":
+{
+	"frame": {"x":1,"y":26,"w":18,"h":19},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":18,"h":19},
+	"sourceSize": {"w":18,"h":19}
+},
+"Kill_Slugcat_Red.png":
+{
+	"frame": {"x":21,"y":20,"w":18,"h":17},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":18,"h":17},
+	"sourceSize": {"w":18,"h":17}
+},
+"Kill_Slugcat_Rivulet.png":
+{
+	"frame": {"x":21,"y":1,"w":22,"h":17},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":22,"h":17},
+	"sourceSize": {"w":22,"h":17}
+},
+"Kill_Slugcat_Saint.png":
+{
+	"frame": {"x":41,"y":20,"w":18,"h":17},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":18,"h":17},
+	"sourceSize": {"w":18,"h":17}
+},
+"Kill_Slugcat_Spear.png":
+{
+	"frame": {"x":1,"y":1,"w":18,"h":23},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":18,"h":23},
+	"sourceSize": {"w":18,"h":23}
+},
+"Kill_Slugcat_White.png":
+{
+	"frame": {"x":21,"y":39,"w":18,"h":17},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":18,"h":17},
+	"sourceSize": {"w":18,"h":17}
+},
+"Kill_Slugcat_Yellow.png":
+{
+	"frame": {"x":41,"y":39,"w":18,"h":17},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":18,"h":17},
+	"sourceSize": {"w":18,"h":17}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "Kill_Slugcats.png",
+	"format": "RGBA8888",
+	"size": {"w":64,"h":57},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:a5dcb111db2cef8e7da4a9e345d12b34:3c22c5c6f002cf4c509477f233194111:f699c9d2dd5a2752ed2bdcd51e996631$"
+}
+}
